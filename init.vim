@@ -51,7 +51,7 @@ let g:clipboard = {
       \ }
 
 " Paste system clipboard with Ctrl + v
-inoremap <C-v> <ESC>"+gPi    
+inoremap <C-v> <ESC>"+gpi
 nnoremap <C-v> "+gP<ESC>
 vnoremap <C-v> d"+gP<ESC>
 cnoremap <C-v> <C-r>+
@@ -134,7 +134,9 @@ call plug#begin()
     Plug 'unblevable/quick-scope'
 
     Plug 'michaelb/sniprun', {'do': 'sh install.sh'}
+
     Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-rhubarb'
 call plug#end()
 
 " ==== Plug Settings ==================
