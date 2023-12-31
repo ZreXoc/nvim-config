@@ -34,6 +34,8 @@ set updatetime=300
 " set signcolumn=yes
 set number relativenumber
 
+" ==== Clipboard Settings ==================
+
 " set clipboard+=unnamedplus
 let g:clipboard = {
       \   'name': 'win32yank',
@@ -47,9 +49,24 @@ let g:clipboard = {
       \   },
       \   'cache_enabled': 0,
       \ }
-" vnoremap <silent><C-c> :w !clip.exe<CR><CR>
+
+" Paste system clipboard with Ctrl + v
+inoremap <C-v> <ESC>"+gPi    
+nnoremap <C-v> "+gP<ESC>
+vnoremap <C-v> d"+gP<ESC>
+cnoremap <C-v> <C-r>+
+
+" Cut to system clipboard with Ctrl + x
+vnoremap <C-x> "+d
+"nnoremap <C-x> "+dd
+inoremap <C-x> <ESC>"+ddi
+
+" Copy to system clipboard with Ctr + c
 vnoremap <C-c> "+y
-nnoremap <C-S-v> o<esc>"*p
+nnoremap <C-c> "+yy
+inoremap <C-c> <ESC>"+yyi
+
+" ==== end Clipboard Settings ==================
 
 "ctags
 set tags=./.tags;,.tags;$HOME/.cache/tags
@@ -79,7 +96,6 @@ call plug#begin()
 
 	Plug 'jiangmiao/auto-pairs'
     Plug 'tpope/vim-surround'
-	Plug 'preservim/nerdtree'
 	Plug 'preservim/nerdcommenter'
 	Plug 'ferrine/md-img-paste.vim'
 	Plug 'frazrepo/vim-rainbow'
@@ -118,6 +134,7 @@ call plug#begin()
     Plug 'unblevable/quick-scope'
 
     Plug 'michaelb/sniprun', {'do': 'sh install.sh'}
+    Plug 'tpope/vim-fugitive'
 call plug#end()
 
 " ==== Plug Settings ==================
@@ -125,7 +142,6 @@ call plug#end()
 colorscheme gruvbox
 
 " vim-sneak
-
 highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
 highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
 
@@ -146,21 +162,6 @@ let g:airline_theme="raven"
 
 " neoscroll
 lua require('neoscroll').setup()
-
-" NERDTree
-let g:NERDSpaceDelims = 1
-" Start NERDTree when Vim is started without file arguments.
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists('s:std_in') h NERDTree | endif
-
-let g:NERDCompactSexyComs = 1
-let g:NERDDefaultAlign = 'left'
-let g:NERDAltDelims_java = 1
-let g:NERDCommentEmptyLines = 1
-let g:NERDTrimTrailingWhitespace = 1
-let g:NERDToggleCheckAllLines = 1
-let NERDTreeShowHidden=1
-
 
 let g:rainbow_active = 1
 
@@ -205,13 +206,11 @@ endfor
 
 " ==== end load vim files ==================
 
-" ==== plug mappings ============
-
-nnoremap <leader>no :NERDTreeFind<CR>
-nnoremap <leader>nt :NERDTreeToggle<CR>
-nnoremap <leader>nf :NERDTreeFocus<CR>
+" ==== Plugin Mappings ==================
 
 " map f <Plug>Sneak_f
 " map F <Plug>Sneak_F
 " map t <Plug>Sneak_t
 " map T <Plug>Sneak_T
+
+" ==== end Plugin Mappings ==================
