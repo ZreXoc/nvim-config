@@ -1,12 +1,5 @@
 let g:python3_host_prog = '/bin/python'
 
-" ==== mappings ==================
-let mapleader="\<space>"
-imap jk <esc>
-nmap <tab> :bn<cr>
-nnoremap <M-w> :bd <CR>
-nnoremap <leader>nh :noh<CR>
-
 set termguicolors
 set termencoding=utf-8
 set encoding=utf8
@@ -38,33 +31,18 @@ set number relativenumber
 
 " set clipboard+=unnamedplus
 let g:clipboard = {
-      \   'name': 'win32yank',
+      \   'name': 'wl-clipboard',
       \   'copy': {
-      \      '+': 'win32yank -i --crlf',
-      \      '*': 'win32yank -i --crlf',
+      \      '+': 'wl-copy',
+      \      '*': 'wl-copy',
       \    },
       \   'paste': {
-      \      '+': 'win32yank -o --lf',
-      \      '*': 'win32yank -o --lf',
+      \      '+': 'wl-paste',
+      \      '*': 'wl-paste',
       \   },
       \   'cache_enabled': 0,
       \ }
 
-" Paste system clipboard with Ctrl + v
-inoremap <C-v> <ESC>"+gpi
-nnoremap <C-v> "+gP<ESC>
-vnoremap <C-v> d"+gP<ESC>
-cnoremap <C-v> <C-r>+
-
-" Cut to system clipboard with Ctrl + x
-vnoremap <C-x> "+d
-"nnoremap <C-x> "+dd
-inoremap <C-x> <ESC>"+ddi
-
-" Copy to system clipboard with Ctr + c
-vnoremap <C-c> "+y
-nnoremap <C-c> "+yy
-inoremap <C-c> <ESC>"+yyi
 
 " ==== end Clipboard Settings ==================
 
@@ -84,21 +62,26 @@ syn match math '\$[^$].\{-}\$'
 hi link math Statement
 
 call plug#begin()
-	Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
 	Plug 'godlygeek/tabular'
     Plug 'rcarriga/nvim-notify'
-    Plug 'ellisonleao/gruvbox.nvim'
+    "Plug 'ellisonleao/gruvbox.nvim'
+    Plug 'Luxed/ayu-vim'
     Plug 'ryanoasis/vim-devicons'
+    "Plug 'Yggdroot/indentLine'
+    Plug 'mhinz/vim-startify'
+    Plug 'voldikss/vim-floaterm'
+    Plug 'liuchengxu/vim-which-key'
 
 	Plug 'plasticboy/vim-markdown'
 
 	Plug 'jiangmiao/auto-pairs'
     Plug 'tpope/vim-surround'
 	Plug 'preservim/nerdcommenter'
-	Plug 'ferrine/md-img-paste.vim'
-	Plug 'frazrepo/vim-rainbow'
+	"Plug 'frazrepo/vim-rainbow'
+    Plug 'luochen1990/rainbow'
     Plug 'rhysd/vim-clang-format'
     " Plug 'JBakamovic/cxxd-vim'
     Plug 'skywind3000/asyncrun.vim'
@@ -120,14 +103,16 @@ call plug#begin()
     Plug 'mzlogin/vim-markdown-toc'
     Plug 'lervag/vimtex'
 
-    Plug 'SirVer/ultisnips'
+    "Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
     Plug 'sillybun/zyt-snippet'
     Plug 'nvim-lua/plenary.nvim'
     Plug 'ahmedkhalf/project.nvim'
     " Plug 'puremourning/vimspector'
+
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-    Plug 'junegunn/fzf.vim'
+    "Plug 'junegunn/fzf.vim'
+    "Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
 
     Plug 'easymotion/vim-easymotion'
     Plug 'justinmk/vim-sneak'
@@ -137,11 +122,14 @@ call plug#begin()
 
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-rhubarb'
+    Plug 'lewis6991/gitsigns.nvim'
 call plug#end()
 
 " ==== Plug Settings ==================
 " colorscheme
-colorscheme gruvbox
+"colorscheme gruvbox
+let ayucolor="mirage"
+colorscheme ayu
 
 " vim-sneak
 highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
@@ -165,6 +153,7 @@ let g:airline_theme="raven"
 " neoscroll
 lua require('neoscroll').setup()
 
+" rainbow
 let g:rainbow_active = 1
 
 autocmd FileType markdown nnoremap <silent> <C-p> :call mdip#MarkdownClipboardImage()<CR>
@@ -194,25 +183,83 @@ autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
 " Toggle auto formatting:
 nmap <Leader>C :ClangFormatAutoToggle<CR>
 
+" sniprun
+
+
 "==== end Plug Settings ==================
 
 " ==== load vim files ==================
 
-for f in globpath('~/.config/nvim/configs/', '*.vim', 0, 1, 0)
+
+for f in globpath('~/.config/nvim/user-configs/', '*.vim', 0, 1, 0)
     execute 'source' f
 endfor
 
-for l in globpath('~/.config/nvim/configs/', '*.lua', 0, 1, 0)
+for l in globpath('~/.config/nvim/user-configs/', '*.lua', 0, 1, 0)
+    execute 'source' l
+endfor
+
+for f in globpath('~/.config/nvim/plug-configs/', '*.vim', 0, 1, 0)
+    execute 'source' f
+endfor
+
+for l in globpath('~/.config/nvim/plug-configs/', '*.lua', 0, 1, 0)
     execute 'source' l
 endfor
 
 " ==== end load vim files ==================
 
-" ==== Plugin Mappings ==================
+" vim-which-key
 
-" map f <Plug>Sneak_f
-" map F <Plug>Sneak_F
-" map t <Plug>Sneak_t
-" map T <Plug>Sneak_T
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+nnoremap <silent> \ :WhichKey '\'<CR>
+set timeoutlen=500
+let g:which_key_map_space = {}
+let g:which_key_map_space['w'] = {
+    \ 'name' : '+windows' ,
+    \ 'r' : ['<C-W>w'     , 'other-window']          ,
+    \ 'd' : ['<C-W>c'     , 'delete-window']         ,
+    \ '-' : ['<C-W>s'     , 'split-window-below']    ,
+    \ '|' : ['<C-W>v'     , 'split-window-right']    ,
+    \ '2' : ['<C-W>v'     , 'layout-double-columns'] ,
+    \ 'h' : ['<C-W>h'     , 'window-left']           ,
+    \ 'j' : ['<C-W>j'     , 'window-below']          ,
+    \ 'l' : ['<C-W>l'     , 'window-right']          ,
+    \ 'k' : ['<C-W>k'     , 'window-up']             ,
+    \ 'H' : ['<C-W>5<'    , 'expand-window-left']    ,
+    \ 'J' : [':resize +5'  , 'expand-window-below']  ,
+    \ 'L' : ['<C-W>5>'    , 'expand-window-right']   ,
+    \ 'K' : [':resize -5'  , 'expand-window-up']     ,
+    \ '=' : ['<C-W>='     , 'balance-window']        ,
+    \ 's' : ['<C-W>s'     , 'split-window-below']    ,
+    \ 'v' : ['<C-W>v'     , 'split-window-below']    ,
+    \ '?' : ['Windows'    , 'fzf-window']            ,
+\ }
 
-" ==== end Plugin Mappings ==================
+let g:which_key_map_space['f'] = {
+    \ 'name' : '+find' ,
+    \ 'p' :  'project files'            ,
+    \ 'b' :  'file buffers'            ,
+    \ 'B' :  'all buffers'            ,
+    \ '*' : 'any word'         ,
+    \ 'w' : 'whole word'         ,
+    \ '.' : 'current word'         ,
+\ }
+let g:which_key_map_space['p'] = {
+    \ 'name' : '+program' ,
+    \ 'b' : 'build'       ,
+    \ 'r' : 'run'       ,
+    \ 'q' : 'quick run'       ,
+\ }
+
+let g:which_key_map_space['e'] = {
+    \ 'name' : '+editor' ,
+\ }
+
+call which_key#register('<Space>', "g:which_key_map_space")
+
+lua <<EOF
+
+require('gitsigns').setup()
+
+EOF

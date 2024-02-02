@@ -1,5 +1,5 @@
 if vim.g.neovide then
-    vim.o.guifont = "CaskaydiaCove Nerd Font:h14,WenQuanYi Zen Hei:h14" -- text below applies for VimScript
+    vim.o.guifont = "CaskaydiaCove NF:h14,WenQuanYi Zen Hei:h14" -- text below applies for VimScript
  
     vim.g.neovide_remember_window_size = true
 
